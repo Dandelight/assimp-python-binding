@@ -16,6 +16,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
 
     steps:
     - name: Checkout
@@ -32,6 +33,11 @@ jobs:
 
     - name: Install dependencies
       run: uv sync
+
+    - if: ${{ matrix.os == 'ubuntu-latest' }}
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y zlib1g-dev
 
     - name: Build the project
       run: uv build
