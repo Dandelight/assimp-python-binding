@@ -9,10 +9,25 @@ authors = [
 requires-python = ">=3.10"
 dependencies = []
 
+[build-system]
+requires = ["scikit-build-core>=0.10", "pybind11"]
+build-backend = "scikit_build_core.build"
+
 [tool.scikit-build]
 minimum-version = "build-system.requires"
 build-dir = "build/{wheel_tag}"
 
-[build-system]
-requires = ["scikit-build-core>=0.10", "pybind11"]
-build-backend = "scikit_build_core.build"
+# 安装组件
+install.components = ["python"]
+# 包含动态库
+wheel.install-dir = "assimp_export"
+wheel.packages = ["python/assimp_export"]
+
+[tool.scikit-build.cmake.define]
+# 构建选项
+BUILD_SHARED_LIBS = "ON"
+ASSIMP_BUILD_ASSIMP_TOOLS = "OFF"
+ASSIMP_BUILD_TESTS = "OFF"
+ASSIMP_BUILD_SAMPLES = "OFF"
+ASSIMP_INSTALL = "ON"
+ASSIMP_NO_EXPORT = "OFF"
