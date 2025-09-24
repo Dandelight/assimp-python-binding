@@ -6,7 +6,7 @@ readme = "README.md"
 authors = [
     { name = "Ruiming Guo", email = "raymond@qingnan.tech" }
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.8"
 dependencies = []
 
 [build-system]
@@ -24,10 +24,13 @@ wheel.install-dir = "assimp_export"
 wheel.packages = ["python/assimp_export"]
 
 [tool.scikit-build.cmake.define]
-# 构建选项
-BUILD_SHARED_LIBS = "ON"
+BUILD_SHARED_LIBS = "OFF"
 ASSIMP_BUILD_ASSIMP_TOOLS = "OFF"
 ASSIMP_BUILD_TESTS = "OFF"
 ASSIMP_BUILD_SAMPLES = "OFF"
-ASSIMP_INSTALL = "ON"
+ASSIMP_INSTALL = "OFF"
+ASSIMP_WARNINGS_AS_ERRORS = "OFF"
+
+# 编译 USD 导入器（依赖 tinyusdz）和所有导出器
+ASSIMP_BUILD_USD_IMPORTER = "ON"
 ASSIMP_NO_EXPORT = "OFF"
