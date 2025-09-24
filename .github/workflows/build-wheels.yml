@@ -3,6 +3,10 @@ name: Build Wheels
 env:
   UV_SYSTEM_PYTHON: 1
 
+# 创建 Release
+permissions:
+  contents: write
+
 on:
   push:
     branches:
@@ -13,12 +17,12 @@ on:
 
 jobs:
   build:
-    name: ${{ matrix.os }} python ${{ matrix.python }}
-    runs-on: ${{ matrix.os }}
+    name: python ${{ matrix.python }} ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}-latest
     strategy:
       matrix:
-        os: [windows-latest, macos-latest]
-        python: ['3.8', '3.9', '3.10', '3.11', "3.12"]
+        os: [windows, macos]
+        python: ['3.8', '3.9', '3.10', '3.11', '3.12']
       fail-fast: false
 
     steps:
