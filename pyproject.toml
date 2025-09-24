@@ -3,9 +3,7 @@ name = "assimp-python-binding"
 version = "0.1.1"
 description = "Add your description here"
 readme = "README.md"
-authors = [
-    { name = "Ruiming Guo", email = "raymond@qingnan.tech" }
-]
+authors = [{ name = "Ruiming Guo", email = "raymond@qingnan.tech" }]
 requires-python = ">=3.8"
 dependencies = []
 
@@ -17,11 +15,12 @@ build-backend = "scikit_build_core.build"
 minimum-version = "build-system.requires"
 build-dir = "build/{wheel_tag}"
 
-# 安装组件
+# 只安装 Python 包（避免将 CMake 的默认目标安装到系统前缀）
 install.components = ["python"]
-# 包含动态库
-wheel.install-dir = "assimp_export"
-wheel.packages = ["python/assimp_export"]
+
+# 将 Python 包和扩展一起打到名为 assimp_python_binding 的顶层目录
+wheel.install-dir = "assimp_python_binding"
+wheel.packages = ["src/assimp_python_binding"]
 
 [tool.scikit-build.cmake.define]
 BUILD_SHARED_LIBS = "OFF"
@@ -31,6 +30,6 @@ ASSIMP_BUILD_SAMPLES = "OFF"
 ASSIMP_INSTALL = "OFF"
 ASSIMP_WARNINGS_AS_ERRORS = "OFF"
 
-# 编译 USD 导入器（依赖 tinyusdz）和所有导出器
+# 启用 USD 导入器和导出器
 ASSIMP_BUILD_USD_IMPORTER = "ON"
 ASSIMP_NO_EXPORT = "OFF"

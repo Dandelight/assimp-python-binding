@@ -37,7 +37,17 @@ target_compile_definitions(assimp_export_core PRIVATE VERSION_INFO="${PROJECT_VE
 # 安装扩展模块
 install(TARGETS assimp_export_core
     COMPONENT python
-    DESTINATION assimp_export
+    LIBRARY DESTINATION .
+    RUNTIME DESTINATION .
+)
+
+# 安装 Python 包资源到包根
+install(FILES
+    src/assimp_python_binding/__init__.py
+    src/assimp_python_binding/__init__.pyi
+    src/assimp_python_binding/py.typed
+    COMPONENT python
+    DESTINATION .
 )
 
 # 如果使用动态库，需要安装动态库文件
@@ -46,6 +56,6 @@ if(BUILD_SHARED_LIBS)
     get_target_property(ASSIMP_LOCATION assimp LOCATION)
     install(FILES $<TARGET_FILE:assimp>
         COMPONENT python
-        DESTINATION assimp_export
+        DESTINATION assimp_python_binding
     )
 endif()
