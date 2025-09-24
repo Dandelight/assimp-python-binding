@@ -12,6 +12,7 @@ class AssimpExportWrapper {
   Assimp::Importer importer;
   Assimp::Exporter exporter;
   bool enable_logging;
+  bool enable_postprocess;
 
   void log(const std::string& msg) const {
     if (enable_logging) {
@@ -42,12 +43,14 @@ class AssimpExportWrapper {
     log(std::string("Input: ") + usdzFile);
     log(std::string("Output: ") + objFile);
 
-    unsigned int ppFlags = aiProcess_Triangulate | aiProcess_FlipUVs |
-                           aiProcess_GenSmoothNormals |
-                           aiProcess_JoinIdenticalVertices;
+    unsigned int ppFlags = 0;
 
-    log("Post-process flags: "
-        "Triangulate | FlipUVs | GenSmoothNormals | JoinIdenticalVertices");
+    if (enable_postprocess) {
+      ppFlags |= aiProcess_Triangulate | aiProcess_FlipUVs |
+                 aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices;
+      log("Post-process flags: "
+          "Triangulate | FlipUVs | GenSmoothNormals | JoinIdenticalVertices");
+    }
 
     const aiScene* scene = importer.ReadFile(usdzFile, ppFlags);
 
@@ -103,7 +106,8 @@ PYBIND11_MODULE(assimp_export_core, m) {
   m.doc() = "Assimp Export Python Binding";
 
   pybind11::class_<AssimpExportWrapper>(m, "AssimpExporter")
-      .def(pybind11::init<bool>(), pybind11::arg("enable_logging") = false)
+      .def(pybind11::init<bool>(), pybind11::arg("enable_logging") = false,
+           pybind11::arg("enable_postprocess") = false)
       .def("get_supported_formats", &AssimpExportWrapper::getSupportedFormats)
       .def("usdz_to_obj", &AssimpExportWrapper::usdzToObj)
       .def("get_last_error", &AssimpExportWrapper::getLastError);
