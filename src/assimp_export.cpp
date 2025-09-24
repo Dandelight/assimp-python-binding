@@ -21,8 +21,8 @@ class AssimpExportWrapper {
   }
 
  public:
-  AssimpExportWrapper(bool enableLogging = false)
-      : enable_logging(enableLogging) {
+  AssimpExportWrapper(bool enableLogging = false, bool enablePostprocess = true)
+      : enable_logging(enableLogging), enable_postprocess(enablePostprocess) {
     if (enable_logging) {
       std::cout << "[assimp_export] Logger enabled" << std::endl;
     }
@@ -106,7 +106,8 @@ PYBIND11_MODULE(assimp_export_core, m) {
   m.doc() = "Assimp Export Python Binding";
 
   pybind11::class_<AssimpExportWrapper>(m, "AssimpExporter")
-      .def(pybind11::init<bool>(), pybind11::arg("enable_logging") = false,
+      .def(pybind11::init<bool, bool>(),
+           pybind11::arg("enable_logging") = false,
            pybind11::arg("enable_postprocess") = false)
       .def("get_supported_formats", &AssimpExportWrapper::getSupportedFormats)
       .def("usdz_to_obj", &AssimpExportWrapper::usdzToObj)
