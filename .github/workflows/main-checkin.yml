@@ -1,0 +1,48 @@
+name: Checkin Build
+
+env:
+  UV_SYSTEM_PYTHON: 1
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: python ${{ matrix.python }} ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      matrix:
+        os: [windows, macos, ubuntu]
+        python: ['3.12']
+      fail-fast: false
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v5
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+        submodules: recursive
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v6
+      with:
+        enable-cache: true
+        python-version: ${{ matrix.python }}
+
+    - name: Install dependencies
+      run: uv sync
+
+    - name: Build the project
+      run: uv build
+
+    - name: Minimize uv cache
+      run: uv cache prune --ci
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: wheels-${{ matrix.os }}-${{ matrix.python }}  # 确保名称唯一
+        path: dist/

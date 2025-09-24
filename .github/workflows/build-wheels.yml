@@ -1,4 +1,4 @@
-name: Build Wheels
+name: Build Wheels for Release
 
 env:
   UV_SYSTEM_PYTHON: 1
@@ -9,11 +9,8 @@ permissions:
 
 on:
   push:
-    branches:
-      - main
     tags:
       - 'v*'  # 推送 tag 时触发 release
-  workflow_dispatch:
 
 jobs:
   build:
@@ -51,7 +48,7 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: wheels-${{ matrix.os }}-${{ matrix.python }}  # 确保名称唯一
+        name: wheels-${{ matrix.os }}-${{ matrix.python }}
         path: dist/
 
   release:
