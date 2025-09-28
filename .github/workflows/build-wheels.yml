@@ -18,7 +18,7 @@ jobs:
     runs-on: ${{ matrix.os }}-latest
     strategy:
       matrix:
-        os: [windows, macos]
+        os: [windows, macos, ubuntu]
         python: ['3.8', '3.9', '3.10', '3.11', '3.12']
       fail-fast: false
 

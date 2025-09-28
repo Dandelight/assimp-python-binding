@@ -12,6 +12,10 @@ else()
     set(CMAKE_INSTALL_RPATH "$ORIGIN")
 endif()
 
+if(UNIX AND NOT APPLE)
+    set(ASSIMP_BUILD_ZLIB ON CACHE BOOL "Build ZLIB on Linux" FORCE)
+endif()
+
 add_subdirectory(assimp)
 
 # 查找pybind11
